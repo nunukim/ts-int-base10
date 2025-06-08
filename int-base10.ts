@@ -85,12 +85,6 @@ export type IntBase10Type = PosIntBase10Type | NegIntBase10Type | IntBase10Zero
 type IntBase10One = {p: [1], n: []}
 
 /**
- * JavaScriptの安全な整数の最大値（Number.MAX_SAFE_INTEGER）
- * 9,007,199,254,740,991
- */
-type MAX_SAFE_INTEGER = IntBase10<"9007199254740991">
-
-/**
  * 整数として扱える型の共用体
  */
 type IntLike = number | bigint | string | IntBase10Type
@@ -148,17 +142,16 @@ type _O<X extends IntBase10Type, T extends IntLike> =
  * IntBase10Typeを文字列に変換する内部実装
  * @internal
  */
-export type _ToS<X extends IntBase10Type> =
+type _ToS<X extends IntBase10Type> =
   X extends NegIntBase10Type ? `${'-'}${__SerializeDigits<X['n']>}`
   : X extends PosIntBase10Type ? __SerializeDigits<X['p']>
   : '0'
 
 /**
  * IntBase10Typeを数値に変換する内部実装
- * 安全な整数範囲（Number.MAX_SAFE_INTEGER）を超える場合はbigintで返す
  * @internal
  */
-export type _ToN<X extends IntBase10Type> =
+type _ToN<X extends IntBase10Type> =
   _ToS<X> extends `${infer N extends number}` ? N : never
 
 /**
